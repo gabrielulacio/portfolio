@@ -1,0 +1,76 @@
+---
+
+import { getCollection, render } from 'astro:content';
+import ProjectCard from './ProjectCard.astro';
+
+const allProjects = await getCollection('projects');
+
+const sorted = allProjects.sort((a, b) => {
+  if (a.data.featured && !b.data.featured) return -1;
+  if (!a.data.featured && b.data.featured) return 1;
+  return new Date(b.data.date).getTime() - new Date(a.data.date).getTime();
+});
+
+// Pre-renderizar el Markdown de cada proyecto a HTML string
+const projectsWithContent = await Promise.all(
+  sorted.map(async (project) => {
+    const { Content } = await render(project);
+    return { project, Content };
+  })
+);
+---
+
+<section
+  id="proyectos"
+  class="mx-auto max-w-6xl px-6 py-24"
+  aria-labelledby="projects-heading"
+>
+
+  <!-- Header -->
+  <div class="mb-12 flex flex-col gap-3">
+    <span class="font-mono text-xs text-[#ACE600] uppercase tracking-widest">
+      // proyectos destacados
+    </span>
+    <h2
+      id="projects-heading"
+      class="text-3xl sm:text-4xl font-bold text-[#F1F1F1] tracking-tight"
+    >
+      Proyectos
+    </h2>
+    <p class="text-[#A3A3A3] max-w-lg text-sm leading-relaxed">
+      Selección de proyectos personales y profesionales.
+      Haz clic en una tarjeta para ver los detalles.
+    </p>
+    <div class="w-12 h-px bg-[#ACE600] mt-1"></div>
+  </div>
+
+  <!-- Project grid -->
+  {projectsWithContent.length === 0 ? (
+    <p class="text-[#A3A3A3] text-sm font-mono">
+      // No se encontraron proyectos.
+    </p>
+  ) : (
+    <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" role="list">
+      {projectsWithContent.map(({ project, Content }) => (
+        <li>
+          <ProjectCard
+            slug={project.id}
+            title={project.data.title}
+            description={project.data.description}
+            tags={project.data.tags}
+            featured={project.data.featured}
+            liveUrl={project.data.liveUrl}
+            repoUrl={project.data.repoUrl ?? project.data.githubUrl}
+            image={project.data.image}
+            cardImage={project.data.cardImage}
+            modalImage={project.data.modalImage}
+            date={project.data.date}
+          >
+            <Content />
+          </ProjectCard>
+        </li>
+      ))}
+    </ul>
+  )}
+
+</section>

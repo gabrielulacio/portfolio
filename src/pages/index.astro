@@ -1,0 +1,222 @@
+---
+
+import MainLayout from '../layouts/MainLayout.astro';
+import Hero      from '../components/Hero.astro';
+import Projects  from '../components/Projects.astro';
+import Skills    from '../components/Skills.astro';
+---
+
+<MainLayout
+  title="Portfolio"
+  description="Desarrollador Full-Stack venezolano, estudiante de Ingeniería en Informática (UNET). Especializado en interfaces web modernas y arquitectura de software."
+>
+  <!-- ── JSON-LD: Person schema para Google ─────────────────────── -->
+  <script type="application/ld+json" is:inline set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Gabriel Ulacio",
+    "url": "https://gabrielulacio.dev",
+    "jobTitle": "Desarrollador Full-Stack",
+    "description": "Desarrollador Full-Stack venezolano, estudiante de Ingeniería en Informática (UNET). Especializado en interfaces web modernas y arquitectura de software.",
+    "nationality": "Venezuelan",
+    "sameAs": [
+      "https://github.com/gabrielulacio",
+      "https://linkedin.com/in/gabrielulacio"
+    ],
+    "knowsAbout": ["Web Development", "Full-Stack", "React", "Node.js", "TypeScript", "Astro", "Tailwind CSS"]
+  })} />
+
+
+  <Hero />
+  <Projects />
+  <Skills />
+  <section
+    id="contacto"
+    class="border-t border-[#2D2D2D]"
+    aria-labelledby="contact-heading"
+  >
+    <div class="mx-auto max-w-2xl px-6 py-24 flex flex-col items-center gap-10">
+
+      <!-- Encabezado -->
+      <div class="flex flex-col items-center text-center gap-3">
+        <span class="font-mono text-xs text-[#ACE600] uppercase tracking-widest">
+          // trabajemos juntos
+        </span>
+        <h2
+          id="contact-heading"
+          class="text-3xl sm:text-4xl font-bold text-[#F1F1F1] tracking-tight"
+        >
+          ¿Tienes un proyecto en mente?
+        </h2>
+        <p class="text-[#A3A3A3] max-w-md text-sm leading-relaxed">
+          Estoy abierto a proyectos freelance, oportunidades laborales y
+          colaboraciones interesantes. Completa el formulario y te respondo
+          a la brevedad.
+        </p>
+      </div>
+
+      <!-- Formulario Formspree -->
+      <form
+        id="contact-form"
+        action="https://formspree.io/f/mzdjrawe"
+        method="POST"
+        novalidate
+        class="w-full flex flex-col gap-5"
+      >
+
+        <!-- Nombre + Correo -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div class="flex flex-col gap-1.5">
+            <label for="name" class="font-mono text-xs text-[#A3A3A3] uppercase tracking-widest">
+              Nombre
+            </label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              placeholder="Tu nombre completo"
+              required
+              autocomplete="name"
+              class="contact-input"
+            />
+          </div>
+          <div class="flex flex-col gap-1.5">
+            <label for="email" class="font-mono text-xs text-[#A3A3A3] uppercase tracking-widest">
+              Correo electrónico
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="tu@correo.com"
+              required
+              autocomplete="email"
+              class="contact-input"
+            />
+          </div>
+        </div>
+
+        <!-- Asunto -->
+        <div class="flex flex-col gap-1.5">
+          <label for="subject" class="font-mono text-xs text-[#A3A3A3] uppercase tracking-widest">
+            Asunto
+          </label>
+          <select
+            id="subject"
+            name="subject"
+            required
+            class="contact-input appearance-none cursor-pointer"
+          >
+            <option value="" disabled selected>Selecciona un motivo...</option>
+            <option value="Proyecto freelance">Proyecto freelance</option>
+            <option value="Oportunidad laboral">Oportunidad laboral</option>
+            <option value="Colaboración">Colaboración</option>
+            <option value="Consulta técnica">Consulta técnica</option>
+            <option value="Otro">Otro</option>
+          </select>
+        </div>
+
+        <!-- Mensaje -->
+        <div class="flex flex-col gap-1.5">
+          <label for="message" class="font-mono text-xs text-[#A3A3A3] uppercase tracking-widest">
+            Mensaje
+          </label>
+          <textarea
+            id="message"
+            name="message"
+            placeholder="Cuéntame sobre tu proyecto o consulta..."
+            required
+            rows="5"
+            class="contact-input resize-none"
+          ></textarea>
+        </div>
+
+        <!-- Honeypot anti-spam (oculto para bots) -->
+        <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
+
+        <!-- Botón enviar -->
+        <button
+          type="submit"
+          id="submit-btn"
+          class="self-end inline-flex items-center gap-2 px-8 py-3 bg-[#ACE600] text-[#0A0A0A] font-semibold text-sm rounded hover:bg-[#c4f500] active:scale-95 transition-all duration-200 glow-accent disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100"
+        >
+          <span id="btn-text">Enviar mensaje →</span>
+        </button>
+
+      </form>
+
+      <!-- Estado: éxito / error (ocultos por defecto) -->
+      <div id="form-success" class="hidden w-full flex flex-col items-center gap-3 py-8 text-center">
+        <div class="text-4xl">✅</div>
+        <p class="text-[#F1F1F1] font-semibold">¡Mensaje enviado!</p>
+        <p class="text-[#A3A3A3] text-sm">Gracias por escribirme. Te responderé pronto.</p>
+      </div>
+
+      <div id="form-error" class="hidden w-full text-center py-4">
+        <p class="text-red-400 text-sm">Ocurrió un error al enviar. Intenta de nuevo o escríbeme directamente a
+          <a href="mailto:geur0308@gmail.com" class="text-[#ACE600] underline underline-offset-2">geur0308@gmail.com</a>.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <style>
+    .contact-input {
+      width: 100%;
+      padding: 0.625rem 0.875rem;
+      background-color: #111111;
+      border: 1px solid #2D2D2D;
+      border-radius: 0.375rem;
+      color: #F1F1F1;
+      font-size: 0.875rem;
+      line-height: 1.5;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .contact-input::placeholder { color: #555; }
+    .contact-input:focus {
+      border-color: #ACE600;
+      box-shadow: 0 0 0 3px rgba(172, 230, 0, 0.12);
+    }
+    .contact-input option { background-color: #111111; color: #F1F1F1; }
+  </style>
+
+  <script>
+    const form        = document.getElementById('contact-form') as HTMLFormElement | null;
+    const submitBtn   = document.getElementById('submit-btn')   as HTMLButtonElement | null;
+    const btnText     = document.getElementById('btn-text');
+    const successBox  = document.getElementById('form-success');
+    const errorBox    = document.getElementById('form-error');
+
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!form || !submitBtn) return;
+
+      // Estado cargando
+      submitBtn.disabled = true;
+      if (btnText) btnText.textContent = 'Enviando...';
+      errorBox?.classList.add('hidden');
+
+      try {
+        const data = new FormData(form);
+        const res  = await fetch(form.action, {
+          method:  'POST',
+          body:    data,
+          headers: { Accept: 'application/json' },
+        });
+
+        if (res.ok) {
+          form.classList.add('hidden');
+          successBox?.classList.remove('hidden');
+        } else {
+          throw new Error('Formspree error');
+        }
+      } catch {
+        errorBox?.classList.remove('hidden');
+        submitBtn.disabled = false;
+        if (btnText) btnText.textContent = 'Enviar mensaje →';
+      }
+    });
+  </script>
+</MainLayout>

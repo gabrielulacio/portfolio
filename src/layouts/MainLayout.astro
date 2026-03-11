@@ -1,0 +1,122 @@
+---
+/**
+ * src/layouts/MainLayout.astro
+ * ─────────────────────────────
+ * Root layout used by every page.
+ * Imports global styles, sets up <head> meta tags,
+ * and wraps content with the site Header and Footer.
+ *
+ * Props:
+ *   title       – <title> tag text (appended with site name)
+ *   description – <meta name="description"> content
+ *   image       – Open Graph image URL (defaults to /og-default.png)
+ */
+
+export interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+}
+
+const {
+  title = 'Portfolio',
+  description = 'Desarrollador Full-Stack venezolano, estudiante de Ingeniería en Informática (UNET). Especializado en interfaces web modernas y arquitectura de software.',
+  image = '/og-default.png',
+} = Astro.props;
+
+const SITE_NAME = 'Gabriel Ulacio';
+const SITE_URL  = 'https://gabrielulacio.dev';
+
+const siteTitle    = title === 'Portfolio'
+  ? `${SITE_NAME} — Desarrollador Full-Stack`
+  : `${title} · ${SITE_NAME}`;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? SITE_URL);
+const ogImage      = image.startsWith('http') ? image : `${SITE_URL}${image}`;
+
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<!doctype html>
+<html lang="es" class="dark">
+  <head>
+    <!-- Viewport -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- SEO principal -->
+    <title>{siteTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={SITE_NAME} />
+    <meta name="keywords" content="desarrollador web, full-stack, frontend, backend, Venezuela, portfolio, React, Node.js, TypeScript, Astro, Tailwind CSS" />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Open Graph (Facebook, LinkedIn, WhatsApp…) -->
+    <meta property="og:type"         content="website" />
+    <meta property="og:url"          content={canonicalURL} />
+    <meta property="og:site_name"    content={SITE_NAME} />
+    <meta property="og:locale"       content="es_VE" />
+    <meta property="og:title"        content={siteTitle} />
+    <meta property="og:description"  content={description} />
+    <meta property="og:image"        content={ogImage} />
+    <meta property="og:image:width"  content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt"    content={`${SITE_NAME} — Portfolio`} />
+
+    <!-- Twitter / X Card -->
+    <meta name="twitter:card"        content="summary_large_image" />
+    <meta name="twitter:title"       content={siteTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image"       content={ogImage} />
+    <meta name="twitter:image:alt"   content={`${SITE_NAME} — Portfolio`} />
+
+    <!-- Favicons & PWA -->
+    <link rel="icon"             type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon"             type="image/x-icon"  href="/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon"                      href="/favicon.svg" />
+    <link rel="manifest"                              href="/site.webmanifest" />
+    <meta name="theme-color"            content="#ACE600" />
+    <meta name="msapplication-TileColor" content="#0A0A0A" />
+
+    <!-- Scroll restoration: top si no hay hash, ancla si lo hay -->
+    <script is:inline>
+      if ('scrollRestoration' in history) {
+        if (window.location.hash) {
+          history.scrollRestoration = 'auto';
+        } else {
+          history.scrollRestoration = 'manual';
+          window.addEventListener('load', () => window.scrollTo(0, 0));
+        }
+      }
+    </script>
+
+    <!-- ── Google Fonts (Inter + JetBrains Mono, display=swap) ────── -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    />
+  </head>
+
+  <body class="bg-[#0A0A0A] text-[#F1F1F1] font-sans antialiased">
+    <!-- Skip-to-content link (accesibilidad) -->
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:top-4 focus:left-4 focus:px-4 focus:py-2 focus:bg-[#ACE600] focus:text-[#0A0A0A] focus:rounded focus:font-semibold"
+    >
+      Skip to content
+    </a>
+
+    <Header />
+
+    <main id="main-content">
+      <slot />
+    </main>
+
+    <Footer />
+  </body>
+</html>

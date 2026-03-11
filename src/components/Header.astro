@@ -1,0 +1,121 @@
+---
+
+const navLinks = [
+  { label: 'Home', href: '/'},
+  { label: 'Proyectos', href: '/#proyectos'},
+  { label: 'Habilidades', href: '/#habilidades'},
+  { label: 'Contacto', href: '/#contacto'},
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<header
+  class="fixed top-0 inset-x-0 z-50 border-b border-[#2D2D2D] bg-[#0A0A0A]/80 backdrop-blur-md"
+  role="banner"
+>
+  <div class="mx-auto max-w-6xl px-6 h-16 flex items-center justify-between">
+
+    <!-- "Logo" -->
+    <a
+      href="/"
+      class="font-mono text-lg font-semibold tracking-tight text-[#F1F1F1] hover:text-[#ACE600] transition-colors duration-200"
+      aria-label="Home"
+    >
+      <span class="text-[#ACE600]">&gt;</span> gabrielulacio.dev <span class="cursor" aria-hidden="true">▋</span>
+    </a>
+
+    <!-- Navegación por la web -->
+    <nav class="hidden md:flex items-center gap-8" aria-label="Main navigation">
+      {navLinks.map(({ label, href }) => {
+        const isActive = href === '/' ? currentPath === '/' : currentPath.startsWith(href.replace('/#', '/'));
+        return (
+          <a
+            href={href}
+            class:list={[
+              'text-sm font-medium tracking-wide transition-colors duration-200',
+              isActive
+                ? 'text-[#ACE600]'
+                : 'text-[#A3A3A3] hover:text-[#F1F1F1]',
+            ]}
+          >
+            {label}
+          </a>
+        );
+      })}
+    </nav>
+
+    <!-- Compatibilidad Mobile hamburger -->
+    <button
+      id="menu-btn"
+      class="md:hidden flex flex-col gap-1.5 p-2 rounded text-[#A3A3A3] hover:text-[#ACE600] transition-colors"
+      aria-label="Toggle navigation menu"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+    >
+      <span class="block w-5 h-px bg-current transition-all duration-200 origin-center" id="bar1"></span>
+      <span class="block w-5 h-px bg-current transition-all duration-200"               id="bar2"></span>
+      <span class="block w-5 h-px bg-current transition-all duration-200 origin-center" id="bar3"></span>
+    </button>
+  </div>
+
+  <nav
+    id="mobile-menu"
+    class="md:hidden hidden flex-col border-t border-[#2D2D2D] bg-[#111111] px-6 py-4 gap-4"
+    aria-label="Mobile navigation"
+  >
+    {navLinks.map(({ label, href }) => (
+      <a
+        href={href}
+        class="text-sm font-medium text-[#A3A3A3] hover:text-[#ACE600] transition-colors duration-200 py-1"
+      >
+        {label}
+      </a>
+    ))}
+  </nav>
+</header>
+
+<div class="h-16" aria-hidden="true"></div>
+
+
+<script>
+  const logo = document.querySelector('a[aria-label="Home"]') as HTMLAnchorElement | null;
+  if (logo) {
+    logo.addEventListener('click', (e) => {
+      if (window.location.pathname === '/') {
+        e.preventDefault();
+        history.replaceState(null, '', '/');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+  }
+
+  const btn  = document.getElementById('menu-btn')!;
+  const menu = document.getElementById('mobile-menu')!;
+  const bar1 = document.getElementById('bar1')!;
+  const bar2 = document.getElementById('bar2')!;
+  const bar3 = document.getElementById('bar3')!;
+
+  btn.addEventListener('click', () => {
+    const open = menu.classList.toggle('hidden') === false;
+    menu.classList.toggle('flex', open);
+    btn.setAttribute('aria-expanded', String(open));
+
+    bar1.style.transform = open ? 'translateY(6px) rotate(45deg)'  : '';
+    bar2.style.opacity   = open ? '0'                               : '1';
+    bar3.style.transform = open ? 'translateY(-6px) rotate(-45deg)' : '';
+  });
+</script>
+
+<style>
+  /* Cursor del logo */
+  .cursor {
+    color: #ACE600;
+    animation: blink 1s step-end infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0; }
+  }
+</style>
