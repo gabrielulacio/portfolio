@@ -79,16 +79,16 @@ const currentPath = Astro.url.pathname;
 
 
 <script>
-  const logo = document.querySelector('a[aria-label="Home"]') as HTMLAnchorElement | null;
-  if (logo) {
-    logo.addEventListener('click', (e) => {
+  const homeLinks = document.querySelectorAll<HTMLAnchorElement>('a[href="/"]');
+  homeLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
       if (window.location.pathname === '/') {
         e.preventDefault();
         history.replaceState(null, '', '/');
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     });
-  }
+  });
 
   const btn  = document.getElementById('menu-btn')!;
   const menu = document.getElementById('mobile-menu')!;
