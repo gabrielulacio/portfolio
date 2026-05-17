@@ -1,10 +1,10 @@
 ---
-
 import { Icon } from 'astro-icon/components';
 
 export interface Props {
   slug: string;
   title: string;
+  subtitle?: string;
   description: string;
   tags: string[];
   date: string;
@@ -14,11 +14,15 @@ export interface Props {
   image?: string;
   cardImage?: string;
   modalImage?: string;
+  images?: string[];
+  index?: number;
+  variant?: 'card' | 'row';
 }
 
 const {
   slug,
   title,
+  subtitle,
   description,
   tags,
   date,
@@ -28,88 +32,173 @@ const {
   image,
   cardImage,
   modalImage,
+  images,
+  index = 0,
+  variant = 'card',
 } = Astro.props;
 
 const cardCoverImage = cardImage ?? image ?? modalImage;
 const modalCoverImage = modalImage ?? cardImage ?? image;
 
-// ID único para vincular tarjeta → modal sin colisiones
 const modalId = `modal-${slug.replace(/[^a-z0-9]/gi, '-')}`;
 
 const formattedDate = new Date(date).toLocaleDateString('es-VE', {
   year: 'numeric', month: 'long', day: 'numeric',
 });
+const formattedYear = new Date(date).getFullYear();
+
+const carouselImages =
+  images && images.length > 0
+    ? images
+    : modalCoverImage
+    ? [modalCoverImage]
+    : [];
+const hasMultiple = carouselImages.length > 1;
 ---
 
-<!-- ========= TARJETA =========-->
+<!-- ========= TARJETA ========= -->
+{variant === 'card' ? (
 <article
-  class="group relative flex flex-col bg-[#111111] border border-[#2D2D2D] rounded-lg overflow-hidden
-         hover:border-[#ACE600]/50 hover:shadow-[0_0_24px_-4px_rgba(172,230,0,0.18)]
-         transition-all duration-300 cursor-pointer"
+  class="project-card sr group relative flex flex-col rounded-[14px] cursor-pointer transition-[border-color,box-shadow] duration-300"
+  style={`
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    transition-delay: ${index * 150}ms;
+  `}
   aria-label={`Proyecto: ${title}`}
   data-modal-trigger={modalId}
+  data-tilt
   tabindex="0"
   role="button"
 >
   <!-- Imagen de portada -->
-  <div class="overflow-hidden h-44 bg-[#0A0A0A]">
+  <div class="relative h-[200px]" style="background: var(--color-bg); clip-path: inset(0 round 14px 14px 0 0);">
     {cardCoverImage ? (
       <img
         src={cardCoverImage}
         alt={`Portada de ${title}`}
-        class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
+        class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-[1.08] transition-all duration-500"
         loading="lazy"
         decoding="async"
       />
     ) : (
-      <div class="w-full h-full flex items-center justify-center bg-[#0f0f0f]">
-        <Icon name="mdi:code-braces" class="w-10 h-10 text-[#2D2D2D]" aria-hidden="true" />
+      <div class="w-full h-full flex items-center justify-center">
+        <Icon name="mdi:code-braces" class="w-10 h-10" style="color: var(--color-border);" aria-hidden="true" />
       </div>
+    )}
+    {featured && (
+      <span
+        class="absolute top-3 right-3 text-[10px] font-bold uppercase tracking-widest rounded px-2.5 py-1"
+        style="
+          color: var(--color-cta);
+          border: 1px solid color-mix(in srgb, var(--color-cta) 50%, transparent);
+          background: color-mix(in srgb, var(--color-cta) 12%, transparent);
+          font-family: var(--font-display);
+          backdrop-filter: blur(4px);
+        "
+      >
+        Destacado
+      </span>
     )}
   </div>
 
-  <div class="flex flex-col flex-1 p-5 gap-3">
+  <div class="flex flex-col flex-1 p-[22px] gap-3">
 
-    <!-- Título + badge -->
-    <div class="flex items-start justify-between gap-3">
-      <h3 class="text-sm font-semibold text-[#F1F1F1] leading-snug group-hover:text-[#ACE600] transition-colors duration-200">
-        {title}
-      </h3>
-      {featured && (
-        <span class="shrink-0 text-[10px] font-mono uppercase tracking-widest text-[#ACE600] border border-[#ACE600]/40 rounded px-2 py-0.5 bg-[#ACE600]/5">
-          Destacado
-        </span>
-      )}
-    </div>
+    <h3
+      class="card-title text-base font-semibold leading-snug transition-colors duration-200"
+      style="color: var(--color-text);"
+    >
+      {title}
+    </h3>
 
-    <!-- Descripción breve -->
-    <p class="text-xs text-[#A3A3A3] leading-relaxed line-clamp-2">
+    {subtitle && (
+      <p class="text-[12px] font-medium -mt-1" style="color: var(--color-accent); font-family: var(--font-display);">
+        {subtitle}
+      </p>
+    )}
+
+    <p class="text-[13px] leading-relaxed line-clamp-2" style="color: var(--color-text-muted);">
       {description}
     </p>
 
-    <!-- Tags (máx. 4 visibles) -->
     <ul class="flex flex-wrap gap-1.5 mt-auto" role="list">
       {tags.slice(0, 4).map((tag) => (
-        <li class="font-mono text-[10px] text-[#A3A3A3] border border-[#2D2D2D] rounded px-2 py-0.5 bg-[#0A0A0A]">
+        <li
+          class="text-[11px] px-2 py-0.5 rounded"
+          style="
+            color: var(--color-text-muted);
+            border: 1px solid var(--color-border);
+            background: var(--color-bg);
+            font-family: var(--font-display);
+          "
+        >
           {tag}
         </li>
       ))}
       {tags.length > 4 && (
-        <li class="font-mono text-[10px] text-[#A3A3A3] border border-[#2D2D2D] rounded px-2 py-0.5 bg-[#0A0A0A]">
+        <li
+          class="text-[11px] px-2 py-0.5 rounded"
+          style="
+            color: var(--color-text-muted);
+            border: 1px solid var(--color-border);
+            background: var(--color-bg);
+            font-family: var(--font-display);
+          "
+        >
           +{tags.length - 4}
         </li>
       )}
     </ul>
 
-    <!-- Pie de tarjeta  -->
-    <div class="flex items-center justify-end pt-2 border-t border-[#2D2D2D]">
-      <span class="text-xs font-mono text-[#ACE600] group-hover:underline underline-offset-2">
+    <div class="flex items-center justify-end pt-2" style="border-top: 1px solid var(--color-border);">
+      <span
+        class="card-link text-[13px] transition-all duration-200"
+        style="color: var(--color-accent); font-family: var(--font-display);"
+      >
         Ver detalles →
       </span>
     </div>
 
   </div>
 </article>
+) : (
+<!-- ========= FILA ========= -->
+<article
+  class="project-row group flex items-center gap-4 px-5 py-4 cursor-pointer transition-colors duration-200"
+  style="border-bottom: 1px solid var(--color-border);"
+  aria-label={`Proyecto: ${title}`}
+  data-modal-trigger={modalId}
+  tabindex="0"
+  role="button"
+>
+  <div class="flex-1 min-w-0">
+    <span class="text-sm font-semibold leading-snug" style="color: var(--color-text); font-family: var(--font-display);">
+      {title}
+    </span>
+    {subtitle && (
+      <span class="text-xs ml-2" style="color: var(--color-accent); font-family: var(--font-display);">
+        {subtitle}
+      </span>
+    )}
+  </div>
+
+  <ul class="hidden sm:flex flex-wrap gap-1.5 shrink-0" role="list">
+    {tags.slice(0, 3).map((tag) => (
+      <li
+        class="text-[11px] px-2 py-0.5 rounded"
+        style="color: var(--color-text-muted); border: 1px solid var(--color-border); background: var(--color-bg); font-family: var(--font-display);"
+      >
+        {tag}
+      </li>
+    ))}
+  </ul>
+
+  <time class="text-xs shrink-0 ml-2" style="color: var(--color-text-muted);" datetime={date}>
+    {formattedYear}
+  </time>
+  <span class="text-sm shrink-0 ml-1 transition-transform duration-200 group-hover:translate-x-1" style="color: var(--color-accent);">→</span>
+</article>
+)}
 
 
 <!-- ========= MODAL ========= -->
@@ -120,35 +209,73 @@ const formattedDate = new Date(date).toLocaleDateString('es-VE', {
   role="dialog"
   aria-labelledby={`${modalId}-title`}
 >
-  <!-- Overlay oscuro -->
-  <div class="modal-overlay absolute inset-0 bg-black/80 backdrop-blur-sm" data-modal-close={modalId}></div>
+  <div
+    class="modal-overlay absolute inset-0 backdrop-blur-[8px]"
+    style="background: rgba(0,0,0,0.75);"
+    data-modal-close={modalId}
+  ></div>
 
-  <!-- Panel -->
-  <div class="modal-panel relative w-full max-w-2xl max-h-[90vh] flex flex-col bg-[#121212] border border-[#2D2D2D] rounded-xl overflow-hidden shadow-[0_0_60px_-10px_rgba(172,230,0,0.2)]">
+  <div
+    class="modal-panel relative w-full max-w-2xl max-h-[90vh] flex flex-col rounded-2xl overflow-hidden"
+    style="
+      background: #1e1e1e;
+      border: 1px solid var(--color-border);
+      box-shadow: 0 40px 80px rgba(0,0,0,0.5), 0 0 40px color-mix(in srgb, var(--color-accent) 10%, transparent);
+    "
+  >
+    {carouselImages.length > 0 && (
+      <div class="modal-carousel shrink-0 relative" style="border-bottom: 1px solid var(--color-border);">
 
-    <!-- Imagen del modal -->
-    {modalCoverImage && (
-      <div class="shrink-0 border-b border-[#2D2D2D]">
-        <img
-          src={modalCoverImage}
-          alt={`Portada de ${title}`}
-          class="block w-full h-auto"
-          loading="lazy"
-          decoding="async"
-        />
+        {carouselImages.map((src, i) => (
+          <img
+            src={src}
+            alt={`${title} — imagen ${i + 1}`}
+            class="carousel-slide block w-full h-auto"
+            data-slide={i}
+            {...(i !== 0 ? { hidden: true } : {})}
+            loading="lazy"
+            decoding="async"
+          />
+        ))}
+
+        {hasMultiple && (
+          <>
+            <button class="carousel-btn carousel-prev" aria-label="Imagen anterior">
+              <Icon name="mdi:chevron-left" class="w-5 h-5" />
+            </button>
+            <button class="carousel-btn carousel-next" aria-label="Imagen siguiente">
+              <Icon name="mdi:chevron-right" class="w-5 h-5" />
+            </button>
+          </>
+        )}
+
+        {hasMultiple && (
+          <div class="carousel-dots" role="tablist" aria-label="Seleccionar imagen">
+            {carouselImages.map((_, i) => (
+              <button
+                class={`carousel-dot${i === 0 ? ' active' : ''}`}
+                data-dot={i}
+                aria-label={`Imagen ${i + 1}`}
+                role="tab"
+                aria-selected={i === 0 ? 'true' : 'false'}
+              />
+            ))}
+          </div>
+        )}
+
       </div>
     )}
 
-    <!-- Cabecera -->
     <div class="flex items-start justify-between gap-4 px-6 pt-5 pb-3 shrink-0">
       <div class="flex flex-col gap-1">
-        <h2 id={`${modalId}-title`} class="text-xl font-bold text-[#F1F1F1] leading-tight">
+        <h2 id={`${modalId}-title`} class="text-[22px] font-bold leading-tight" style="color: var(--color-text);">
           {title}
         </h2>
-        <time class="font-mono text-xs text-[#A3A3A3]" datetime={date}>{formattedDate}</time>
+        <time class="text-xs" style="color: var(--color-text-muted);" datetime={date}>{formattedDate}</time>
       </div>
       <button
-        class="shrink-0 p-1.5 rounded text-[#A3A3A3] hover:text-[#ACE600] hover:bg-[#ACE600]/10 transition-colors"
+        class="modal-close-btn shrink-0 p-1.5 rounded cursor-pointer transition-colors"
+        style="color: var(--color-text-muted);"
         data-modal-close={modalId}
         aria-label="Cerrar"
       >
@@ -156,34 +283,48 @@ const formattedDate = new Date(date).toLocaleDateString('es-VE', {
       </button>
     </div>
 
-    <!-- Tags completos -->
     <ul class="flex flex-wrap gap-2 px-6 pb-3 shrink-0" role="list">
       {tags.map((tag) => (
-        <li class="font-mono text-[11px] text-[#ACE600] border border-[#ACE600]/35 rounded px-2 py-0.5 bg-[#ACE600]/10">
+        <li
+          class="text-[11px] px-2 py-0.5 rounded"
+          style="
+            color: var(--color-accent);
+            border: 1px solid color-mix(in srgb, var(--color-accent) 35%, transparent);
+            background: color-mix(in srgb, var(--color-accent) 10%, transparent);
+            font-family: var(--font-display);
+          "
+        >
           {tag}
         </li>
       ))}
     </ul>
 
-    <div class="border-t border-[#2D2D2D] mx-6 shrink-0"></div>
+    <div class="mx-6 shrink-0" style="border-top: 1px solid var(--color-border);"></div>
 
-    <!-- Contenido Markdown (scrollable) -->
     <div class="prose-modal overflow-y-auto px-6 py-5 flex-1">
       <slot />
     </div>
 
-    <!-- Footer con enlaces -->
     {(repoUrl || liveUrl) && (
-      <div class="flex items-center gap-3 px-6 py-4 border-t border-[#2D2D2D] shrink-0 bg-[#0f0f0f]">
+      <div
+        class="flex items-center gap-3 px-6 py-4 shrink-0"
+        style="border-top: 1px solid var(--color-border); background: var(--color-bg);"
+      >
         {repoUrl && (
           <a
             href={repoUrl}
             target="_blank"
             rel="noopener noreferrer"
-            class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#F1F1F1] border border-[#2D2D2D] rounded px-3 py-1.5 hover:border-[#ACE600] hover:text-[#ACE600] active:scale-95 transition-all duration-200"
+            class="modal-link-outline inline-flex items-center gap-2 text-sm font-semibold px-4 py-2.5 rounded transition-all duration-200"
+            style="
+              color: var(--color-text);
+              border: 1px solid var(--color-border);
+              background: color-mix(in srgb, var(--color-bg) 60%, #000);
+              font-family: var(--font-display);
+            "
           >
             <Icon name="mdi:github" class="w-4 h-4" aria-hidden="true" />
-            Ver en GitHub
+            GitHub
           </a>
         )}
         {liveUrl && (
@@ -191,7 +332,13 @@ const formattedDate = new Date(date).toLocaleDateString('es-VE', {
             href={liveUrl}
             target="_blank"
             rel="noopener noreferrer"
-            class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0A0A0A] bg-[#ACE600] rounded px-3 py-1.5 hover:bg-[#c4f500] transition-colors glow-accent"
+            class="inline-flex items-center gap-2 text-sm font-semibold px-4 py-2.5 rounded transition-all duration-200 active:scale-95"
+            style="
+              background: var(--color-cta);
+              color: #1C1C1C;
+              box-shadow: 0 0 20px color-mix(in srgb, var(--color-cta) 30%, transparent);
+              font-family: var(--font-display);
+            "
           >
             <Icon name="mdi:open-in-new" class="w-4 h-4" aria-hidden="true" />
             Ver en vivo
@@ -199,56 +346,155 @@ const formattedDate = new Date(date).toLocaleDateString('es-VE', {
         )}
       </div>
     )}
-
   </div>
 </div>
 
 
-<!-- ══════════════════════════════════════════════════════════════
-     ESTILOS SCOPED
-══════════════════════════════════════════════════════════════ -->
 <style>
+  .project-card {
+    will-change: transform;
+  }
+
+  .project-card:hover {
+    border-color: color-mix(in srgb, var(--color-accent) 40%, transparent);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3), 0 0 30px color-mix(in srgb, var(--color-accent) 15%, transparent);
+  }
+
+  .project-card:hover .card-title {
+    color: var(--color-accent);
+  }
+
+  .project-card:hover .card-link {
+    transform: translateX(4px);
+  }
+
+  .project-row:hover {
+    background: color-mix(in srgb, var(--color-accent) 6%, transparent);
+  }
+
+  li:last-child .project-row {
+    border-bottom: none;
+  }
+
+  /* Carousel */
+  .carousel-slide[hidden] { display: none; }
+
+  .carousel-btn {
+    position: absolute;
+    top: calc(50% - 16px);
+    transform: translateY(-50%);
+    padding: 6px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(0,0,0,0.55);
+    color: #fff;
+    cursor: pointer;
+    backdrop-filter: blur(4px);
+    transition: background 0.2s ease;
+    z-index: 10;
+  }
+  .carousel-prev { left: 12px; }
+  .carousel-next { right: 12px; }
+  .carousel-btn:hover { background: rgba(0,0,0,0.82); }
+
+  .carousel-dots {
+    position: absolute;
+    bottom: 8px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .carousel-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255,255,255,0.3);
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+  .carousel-dot.active {
+    background: var(--color-accent);
+    transform: scale(1.35);
+  }
+
   .modal-backdrop.is-open { display: flex; }
 
   .modal-panel {
-    animation: modal-in 0.2s ease forwards;
-  }
-  @keyframes modal-in {
-    from { opacity: 0; transform: scale(0.96) translateY(8px); }
-    to   { opacity: 1; transform: scale(1)    translateY(0);   }
+    animation: modalIn 0.4s cubic-bezier(0.16,1,0.3,1);
   }
 
-  .prose-modal { color: #A3A3A3; font-size: 0.875rem; line-height: 1.75; }
-  .prose-modal :where(h2,h3,h4) { color: #F1F1F1; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.5rem; }
+  .modal-close-btn {
+    transition: color 0.2s ease, background 0.2s ease;
+  }
+
+  .modal-close-btn:hover {
+    color: var(--color-accent-light);
+    background: color-mix(in srgb, var(--color-accent) 12%, transparent);
+  }
+
+  .modal-link-outline:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  .prose-modal { color: var(--color-text-muted); font-size: 0.875rem; line-height: 1.75; }
+  .prose-modal :where(h2,h3,h4) { color: var(--color-text); font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.5rem; }
   .prose-modal h2 { font-size: 1.1rem; }
   .prose-modal h3 { font-size: 1rem; }
   .prose-modal p  { margin-bottom: 1rem; }
-  .prose-modal strong { color: #F1F1F1; }
-  .prose-modal em     { color: #ACE600; font-style: italic; }
-  .prose-modal a  { color: #ACE600; text-decoration: underline; text-underline-offset: 3px; }
+  .prose-modal strong { color: var(--color-text); }
+  .prose-modal em     { color: var(--color-accent); font-style: italic; }
+  .prose-modal a  { color: var(--color-accent); text-decoration: underline; text-underline-offset: 3px; }
   .prose-modal ul, .prose-modal ol { padding-left: 1.25rem; margin-bottom: 1rem; }
   .prose-modal li { margin-bottom: 0.3rem; }
-  .prose-modal ul > li::marker { color: #ACE600; }
+  .prose-modal ul > li::marker { color: var(--color-accent); }
   .prose-modal code {
-    font-family: 'JetBrains Mono', monospace; font-size: 0.8em;
-    background: #0A0A0A; border: 1px solid #2D2D2D; border-radius: 3px;
-    padding: 0.1em 0.35em; color: #ACE600;
+    font-size: 0.8em;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 3px;
+    padding: 0.1em 0.35em;
+    color: var(--color-accent);
   }
   .prose-modal pre {
-    background: #0A0A0A; border: 1px solid #2D2D2D; border-radius: 6px;
-    padding: 1rem; overflow-x: auto; margin-bottom: 1rem;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    padding: 1rem;
+    overflow-x: auto;
+    margin-bottom: 1rem;
   }
-  .prose-modal pre code { background: none; border: none; padding: 0; color: #F1F1F1; }
+  .prose-modal pre code { background: none; border: none; padding: 0; color: var(--color-text); }
 
   :global(body.modal-open) { overflow: hidden; }
 </style>
 
 
-<!-- ===== LÓGICA JS (vanilla, mínima) ===== -->
 <script define:vars={{ modalId }}>
   const card    = document.querySelector(`[data-modal-trigger="${modalId}"]`);
   const modal   = document.getElementById(modalId);
   const closers = modal?.querySelectorAll(`[data-modal-close="${modalId}"]`);
+
+  // Carousel state
+  const slides  = Array.from(modal?.querySelectorAll('[data-slide]') ?? []);
+  const dots    = Array.from(modal?.querySelectorAll('[data-dot]') ?? []);
+  const prevBtn = modal?.querySelector('.carousel-prev');
+  const nextBtn = modal?.querySelector('.carousel-next');
+  let current = 0;
+
+  function goTo(n) {
+    slides[current].hidden = true;
+    dots[current]?.classList.remove('active');
+    dots[current]?.setAttribute('aria-selected', 'false');
+    current = ((n % slides.length) + slides.length) % slides.length;
+    slides[current].hidden = false;
+    dots[current]?.classList.add('active');
+    dots[current]?.setAttribute('aria-selected', 'true');
+  }
 
   function openModal() {
     modal?.classList.add('is-open');
@@ -258,6 +504,7 @@ const formattedDate = new Date(date).toLocaleDateString('es-VE', {
   function closeModal() {
     modal?.classList.remove('is-open');
     document.body.classList.remove('modal-open');
+    if (slides.length > 1) goTo(0);
   }
 
   card?.addEventListener('click', openModal);
@@ -270,4 +517,10 @@ const formattedDate = new Date(date).toLocaleDateString('es-VE', {
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && modal?.classList.contains('is-open')) closeModal();
   });
+
+  if (slides.length > 1) {
+    prevBtn?.addEventListener('click', (e) => { e.stopPropagation(); goTo(current - 1); });
+    nextBtn?.addEventListener('click', (e) => { e.stopPropagation(); goTo(current + 1); });
+    dots.forEach((dot, i) => dot.addEventListener('click', (e) => { e.stopPropagation(); goTo(i); }));
+  }
 </script>

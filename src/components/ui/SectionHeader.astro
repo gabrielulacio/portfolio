@@ -1,0 +1,27 @@
+---
+interface Props {
+  label: string;
+  title: string;
+}
+
+const { label, title } = Astro.props;
+---
+
+<div class="sr-left mb-12 flex flex-col gap-3">
+  <span
+    class="font-display text-xs font-medium uppercase tracking-[0.15em]"
+    style="color: var(--color-accent); font-family: var(--font-display);"
+  >
+    {label}
+  </span>
+  <h2
+    class="text-4xl font-bold tracking-tight"
+    style="font-size: clamp(28px, 5vw, 42px); letter-spacing: -0.03em; font-family: var(--font-display);"
+  >
+    {title}
+  </h2>
+  <div
+    class="h-[3px] w-12 rounded"
+    style="background: linear-gradient(90deg, var(--color-accent), var(--color-cta)); transform-origin: left; animation: drawLine 0.8s ease 0.4s both;"
+  ></div>
+</div>

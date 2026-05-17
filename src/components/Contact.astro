@@ -1,0 +1,247 @@
+---
+---
+
+<section
+  id="contacto"
+  class="mx-auto max-w-3xl px-6 py-24"
+  style="border-top: 1px solid var(--color-border);"
+  aria-labelledby="contact-heading"
+>
+  <div class="sr-left mb-12 flex flex-col items-center gap-3 text-center">
+    <span
+      class="font-display text-xs font-medium uppercase tracking-[0.15em]"
+      style="color: var(--color-accent); font-family: var(--font-display);"
+    >
+      // trabajemos juntos
+    </span>
+    <h2
+      class="text-4xl font-bold tracking-tight"
+      style="font-size: clamp(28px, 5vw, 42px); letter-spacing: -0.03em; font-family: var(--font-display);"
+    >
+      ¿Tienes un proyecto en mente?
+    </h2>
+    <p class="text-sm leading-relaxed" style="color: var(--color-text-muted);">
+      Estoy abierto a proyectos freelance, oportunidades laborales<br />y colaboraciones interesantes.
+    </p>
+    <div
+      class="h-[3px] w-12 rounded mx-auto"
+      style="background: linear-gradient(90deg, var(--color-accent), var(--color-cta)); transform-origin: left; animation: drawLine 0.8s ease 0.4s both;"
+    ></div>
+  </div>
+
+  <!-- Success state -->
+  <div id="contact-success" class="hidden flex-col items-center gap-4 py-16 text-center">
+    <div
+      class="w-16 h-16 rounded-full flex items-center justify-center"
+      style="background: color-mix(in srgb, var(--color-accent) 15%, transparent); border: 1px solid color-mix(in srgb, var(--color-accent) 40%, transparent);"
+    >
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" style="color: var(--color-accent);">
+        <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <h3 class="text-xl font-bold" style="font-family: var(--font-display);">¡Mensaje enviado!</h3>
+    <p style="color: var(--color-text-muted);">Gracias por escribirme. Te responderé pronto.</p>
+  </div>
+
+  <!-- Error state -->
+  <div id="contact-error" class="hidden p-4 rounded-lg mb-6" style="background: color-mix(in srgb, #ef4444 10%, transparent); border: 1px solid color-mix(in srgb, #ef4444 30%, transparent);">
+    <p class="text-sm" style="color: #ef4444;">
+      Hubo un error al enviar. Escríbeme directamente a
+      <a href="mailto:geur0308@gmail.com" class="underline">geur0308@gmail.com</a>
+    </p>
+  </div>
+
+  <!-- Form -->
+  <form
+    id="contact-form"
+    class="flex flex-col gap-5"
+    novalidate
+  >
+    <!-- Honeypot -->
+    <input type="text" name="_gotcha" class="hidden" aria-hidden="true" tabindex="-1" autocomplete="off" />
+
+    <!-- Name + Email -->
+    <div class="grid sm:grid-cols-2 gap-5">
+      <div class="flex flex-col gap-2">
+        <label
+          for="contact-name"
+          class="text-xs font-medium uppercase tracking-wider"
+          style="color: var(--color-text-muted); font-family: var(--font-display);"
+        >
+          Nombre
+        </label>
+        <input
+          id="contact-name"
+          name="name"
+          type="text"
+          required
+          autocomplete="name"
+          placeholder="Tu nombre"
+          class="contact-input px-4 py-3 rounded-[10px] text-sm outline-none transition-all duration-200"
+          style="
+            background: var(--color-bg);
+            border: 1px solid var(--color-border);
+            color: var(--color-text);
+            font-family: var(--font-body);
+          "
+        />
+      </div>
+      <div class="flex flex-col gap-2">
+        <label
+          for="contact-email"
+          class="text-xs font-medium uppercase tracking-wider"
+          style="color: var(--color-text-muted); font-family: var(--font-display);"
+        >
+          Email
+        </label>
+        <input
+          id="contact-email"
+          name="email"
+          type="email"
+          required
+          autocomplete="email"
+          placeholder="tu@email.com"
+          class="contact-input px-4 py-3 rounded-[10px] text-sm outline-none transition-all duration-200"
+          style="
+            background: var(--color-bg);
+            border: 1px solid var(--color-border);
+            color: var(--color-text);
+            font-family: var(--font-body);
+          "
+        />
+      </div>
+    </div>
+
+    <!-- Subject -->
+    <div class="flex flex-col gap-2">
+      <label
+        for="contact-subject"
+        class="text-xs font-medium uppercase tracking-wider"
+        style="color: var(--color-text-muted); font-family: var(--font-display);"
+      >
+        Asunto
+      </label>
+      <div class="relative">
+        <select
+          id="contact-subject"
+          name="subject"
+          class="contact-input w-full px-4 py-3 rounded-[10px] text-sm outline-none transition-all duration-200 appearance-none"
+          style="
+            background: var(--color-bg);
+            border: 1px solid var(--color-border);
+            color: var(--color-text);
+            font-family: var(--font-body);
+          "
+        >
+          <option value="">Selecciona un asunto...</option>
+          <option value="Proyecto freelance">Proyecto freelance</option>
+          <option value="Oportunidad laboral">Oportunidad laboral</option>
+          <option value="Colaboración">Colaboración</option>
+          <option value="Consulta técnica">Consulta técnica</option>
+          <option value="Otro">Otro</option>
+        </select>
+        <div class="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2" style="color: var(--color-text-muted);">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+            <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Message -->
+    <div class="flex flex-col gap-2">
+      <label
+        for="contact-message"
+        class="text-xs font-medium uppercase tracking-wider"
+        style="color: var(--color-text-muted); font-family: var(--font-display);"
+      >
+        Mensaje
+      </label>
+      <textarea
+        id="contact-message"
+        name="message"
+        rows="5"
+        required
+        placeholder="Cuéntame sobre tu proyecto..."
+        class="contact-input px-4 py-3 rounded-[10px] text-sm outline-none transition-all duration-200 resize-none"
+        style="
+          background: var(--color-bg);
+          border: 1px solid var(--color-border);
+          color: var(--color-text);
+          font-family: var(--font-body);
+        "
+      ></textarea>
+    </div>
+
+    <!-- Submit -->
+    <div class="flex justify-end">
+      <button
+        id="contact-submit"
+        type="submit"
+        class="inline-flex items-center gap-2 px-8 py-3 rounded-[10px] text-sm font-semibold transition-all duration-200 active:scale-95"
+        style="
+          background: var(--color-cta);
+          color: #1C1C1C;
+          box-shadow: 0 0 20px color-mix(in srgb, var(--color-cta) 30%, transparent);
+          font-family: var(--font-display);
+        "
+      >
+        Enviar mensaje →
+      </button>
+    </div>
+  </form>
+</section>
+
+<style>
+  .contact-input:focus {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 18%, transparent);
+  }
+
+  #contact-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px color-mix(in srgb, var(--color-cta) 50%, transparent);
+  }
+
+  #contact-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+</style>
+
+<script>
+  const form    = document.getElementById('contact-form') as HTMLFormElement;
+  const btn     = document.getElementById('contact-submit') as HTMLButtonElement;
+  const success = document.getElementById('contact-success')!;
+  const error   = document.getElementById('contact-error')!;
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    btn.disabled = true;
+    btn.textContent = 'Enviando...';
+    error.classList.add('hidden');
+
+    const data = new FormData(form);
+
+    try {
+      const res = await fetch('https://formspree.io/f/mzdjrawe', {
+        method: 'POST',
+        body: data,
+        headers: { Accept: 'application/json' },
+      });
+
+      if (res.ok) {
+        form.classList.add('hidden');
+        success.classList.remove('hidden');
+        success.classList.add('flex');
+      } else {
+        throw new Error('bad response');
+      }
+    } catch {
+      error.classList.remove('hidden');
+      btn.disabled = false;
+      btn.textContent = 'Enviar mensaje →';
+    }
+  });
+</script>

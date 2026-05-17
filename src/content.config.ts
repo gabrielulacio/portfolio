@@ -13,6 +13,7 @@ const projects = defineCollection({
   schema: z.object({
 
     title: z.string(),
+    subtitle: z.string().optional(),
     description: z.string(),
     date: z.string(),
     tags: z.array(z.string()),
@@ -22,6 +23,7 @@ const projects = defineCollection({
     image: z.string().optional(),
     cardImage: z.string().optional(),
     modalImage: z.string().optional(),
+    images: z.array(z.string()).optional(),
     featured: z.boolean().default(false),
     
   }),

@@ -1,5 +1,5 @@
 ---
-
+import SectionHeader from './ui/SectionHeader.astro';
 import { Icon } from 'astro-icon/components';
 
 interface Skill {
@@ -16,22 +16,21 @@ const skillGroups: SkillGroup[] = [
   {
     category: 'Lenguajes',
     skills: [
-      
       { name: 'Python',     icon: 'simple-icons:python'     },
       { name: 'SQL',        icon: 'mdi:database'            },
       { name: 'JavaScript', icon: 'simple-icons:javascript' },
       { name: 'C++',        icon: 'simple-icons:cplusplus'  },
-      { name: 'Java',       icon: 'simple-icons:oracle'     },
+      { name: 'Java',       icon: 'mdi:language-java'        },
     ],
   },
   {
     category: 'Frontend & UI',
     skills: [
-      { name: 'React.js',    icon: 'simple-icons:react'       },
-      { name: 'Vue.js',      icon: 'simple-icons:vuedotjs'    },
-      { name: 'Astro',       icon: 'simple-icons:astro'       },
-      { name: 'Tailwind CSS',icon: 'simple-icons:tailwindcss' },
-      { name: 'Figma',       icon: 'simple-icons:figma'       },
+      { name: 'React.js',    icon: 'simple-icons:react'        },
+      { name: 'Vue.js',      icon: 'simple-icons:vuedotjs'     },
+      { name: 'Astro',       icon: 'simple-icons:astro'        },
+      { name: 'Tailwind CSS',icon: 'simple-icons:tailwindcss'  },
+      { name: 'Figma',       icon: 'simple-icons:figma'        },
     ],
   },
   {
@@ -46,10 +45,10 @@ const skillGroups: SkillGroup[] = [
   {
     category: 'Herramientas',
     skills: [
-      { name: 'Git / GitHub', icon: 'simple-icons:git'    },
-      { name: 'HTML5',        icon: 'simple-icons:html5'   },
-      { name: 'CSS3',         icon: 'simple-icons:css3'    },
-      { name: 'Prompt Eng.',  icon: 'mdi:robot-outline'    },
+      { name: 'Git / GitHub', icon: 'simple-icons:github'    },
+      { name: 'HTML5',        icon: 'simple-icons:html5'     },
+      { name: 'CSS3',         icon: 'simple-icons:css3'      },
+      { name: 'Prompt Eng.',  icon: 'mdi:robot-outline'      },
     ],
   },
 ];
@@ -57,46 +56,47 @@ const skillGroups: SkillGroup[] = [
 
 <section
   id="habilidades"
-  class="border-t border-[#2D2D2D] mx-auto max-w-6xl px-6 py-24"
+  class="mx-auto max-w-6xl px-6 py-24"
+  style="border-top: 1px solid var(--color-border);"
   aria-labelledby="skills-heading"
 >
+  <SectionHeader label="// stack técnico" title="Habilidades" />
 
-  <!-- Section header  -->
-  <div class="mb-12 flex flex-col gap-3">
-    <span class="font-mono text-xs text-[#ACE600] uppercase tracking-widest">
-      // habilidades técnicas
-    </span>
-    <h2
-      id="skills-heading"
-      class="text-3xl sm:text-4xl font-bold text-[#F1F1F1] tracking-tight"
-    >
-      Habilidades
-    </h2>
-    <div class="w-12 h-px bg-[#ACE600] mt-1"></div>
-  </div>
-
-  <!-- Skill groups -->
-  <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
-    {skillGroups.map(({ category, skills }) => (
-      <div class="flex flex-col gap-4">
-        <!-- Category label -->
-        <h3 class="font-mono text-xs uppercase tracking-widest text-[#A3A3A3] border-b border-[#2D2D2D] pb-2">
+  <div
+    class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4"
+  >
+    {skillGroups.map(({ category, skills }, gi) => (
+      <div
+        class="sr flex flex-col gap-4"
+        style={`transition-delay: ${gi * 150}ms;`}
+      >
+        <h3
+          class="text-xs font-medium uppercase tracking-[0.12em] pb-3"
+          style="
+            color: var(--color-text-muted);
+            font-family: var(--font-display);
+            border-bottom: 1px solid var(--color-border);
+          "
+        >
           {category}
         </h3>
 
-        <!-- Skill chips -->
-        <ul class="flex flex-col gap-2" role="list">
-          {skills.map(({ name, icon }) => (
-            <li class="flex items-center gap-3 group">
-              <span
-                class="p-1.5 rounded bg-[#0A0A0A] border border-[#2D2D2D] text-[#A3A3A3]
-                       group-hover:border-[#ACE600]/50 group-hover:text-[#ACE600]
-                       transition-all duration-200"
+        <ul class="flex flex-col gap-1" role="list">
+          {skills.map(({ name, icon }, si) => (
+            <li
+              class="skill-item sr flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200"
+              style={`transition-delay: ${gi * 150 + si * 60}ms;`}
+            >
+              <Icon
+                name={icon}
+                class="skill-icon w-4 h-4 shrink-0 transition-all duration-200"
+                style="color: var(--color-text-muted);"
                 aria-hidden="true"
+              />
+              <span
+                class="skill-name text-sm transition-all duration-200"
+                style="color: var(--color-text-muted);"
               >
-                <Icon name={icon} class="w-4 h-4" />
-              </span>
-              <span class="text-sm text-[#A3A3A3] group-hover:text-[#F1F1F1] transition-colors duration-200">
                 {name}
               </span>
             </li>
@@ -105,5 +105,26 @@ const skillGroups: SkillGroup[] = [
       </div>
     ))}
   </div>
-
 </section>
+
+<style>
+  .skill-item:hover {
+    background: color-mix(in srgb, var(--color-accent) 10%, transparent);
+  }
+
+  .skill-item:hover .skill-icon {
+    color: var(--color-accent) !important;
+    filter: drop-shadow(0 0 4px color-mix(in srgb, var(--color-accent) 60%, transparent));
+    transform: scale(1.2);
+  }
+
+  .skill-item:hover .skill-name {
+    color: var(--color-text) !important;
+    font-weight: 500;
+  }
+</style>
+
+<script>
+  import { initScrollReveal } from '../scripts/scroll-reveal.ts';
+  initScrollReveal();
+</script>

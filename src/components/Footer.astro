@@ -1,53 +1,22 @@
 ---
-
+import Logo from './ui/Logo.astro';
 import { Icon } from 'astro-icon/components';
 
 const year = new Date().getFullYear();
 
 const socials = [
-  {
-    label: 'GitHub',
-    href:  'https://github.com/gabrielulacio',
-    icon:  'mdi:github',
-  },
-  {
-    label: 'LinkedIn',
-    href:  'https://linkedin.com/in/gabrielulacio',
-    icon:  'mdi:linkedin',
-  },
-  {
-    label: 'Email',
-    href:  'mailto:geur0308@gmail.com',
-    icon:  'mdi:email-outline',
-  },
+  { label: 'GitHub',   href: 'https://github.com/gabrielulacio',        icon: 'mdi:github' },
+  { label: 'LinkedIn', href: 'https://linkedin.com/in/gabrielulacio',   icon: 'mdi:linkedin' },
+  { label: 'Email',    href: 'mailto:geur0308@gmail.com',               icon: 'mdi:email-outline' },
 ];
 ---
 
-<footer
-  class="border-t border-[#2D2D2D] bg-[#0A0A0A] mt-24"
-  role="contentinfo"
->
-  <div class="mx-auto max-w-6xl px-6 py-10 flex flex-col items-center gap-6">
+<footer class="mt-24 border-t" style="border-color: var(--color-border);" role="contentinfo">
+  <div class="mx-auto max-w-6xl px-6 py-12 flex flex-col items-center gap-6">
 
-    <!-- Desarrollo -->
-    <p class="font-mono text-sm text-[#A3A3A3]">
-      <span class="text-[#ACE600]">&gt;</span> Hecho con
-      <a
-        href="https://astro.build"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="text-[#F1F1F1] hover:text-[#ACE600] transition-colors duration-200"
-      >Astro</a>
-      y
-      <a
-        href="https://tailwindcss.com"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="text-[#F1F1F1] hover:text-[#ACE600] transition-colors duration-200"
-      >Tailwind CSS</a>
-    </p>
+    <Logo size={32} />
 
-    <!-- Redes Sociales -->
+
     <ul class="flex items-center gap-5" role="list">
       {socials.map(({ label, href, icon }) => (
         <li>
@@ -56,7 +25,8 @@ const socials = [
             target={href.startsWith('mailto') ? undefined : '_blank'}
             rel={href.startsWith('mailto') ? undefined : 'noopener noreferrer'}
             aria-label={label}
-            class="text-[#A3A3A3] hover:text-[#ACE600] transition-colors duration-200"
+            class="social-icon transition-all duration-200"
+            style="color: var(--color-text-muted);"
           >
             <Icon name={icon} class="w-5 h-5" aria-hidden="true" />
           </a>
@@ -64,10 +34,22 @@ const socials = [
       ))}
     </ul>
 
-    <!-- Copyright -->
-    <p class="text-xs text-[#A3A3A3] font-mono">
+    <p class="text-xs" style="color: var(--color-text-dim);">
       &copy; {year} Gabriel Ulacio
     </p>
 
   </div>
 </footer>
+
+<script>
+  document.querySelectorAll<HTMLAnchorElement>('.social-icon').forEach(a => {
+    a.addEventListener('mouseenter', () => {
+      a.style.color = 'var(--color-accent)';
+      a.style.transform = 'translateY(-3px)';
+    });
+    a.addEventListener('mouseleave', () => {
+      a.style.color = 'var(--color-text-muted)';
+      a.style.transform = '';
+    });
+  });
+</script>

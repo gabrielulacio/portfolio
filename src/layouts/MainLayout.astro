@@ -78,8 +78,21 @@ import Footer from '../components/Footer.astro';
     <link rel="icon"             type="image/x-icon"  href="/favicon.ico" sizes="any" />
     <link rel="apple-touch-icon"                      href="/favicon.svg" />
     <link rel="manifest"                              href="/site.webmanifest" />
-    <meta name="theme-color"            content="#ACE600" />
-    <meta name="msapplication-TileColor" content="#0A0A0A" />
+    <meta name="theme-color"            content="#367588" />
+    <meta name="msapplication-TileColor" content="#1C1C1C" />
+
+    <!-- Scroll-depth scrollbar gradient -->
+    <script is:inline>
+      (function () {
+        function updateScrollPct() {
+          var max = document.documentElement.scrollHeight - window.innerHeight;
+          var pct = max > 0 ? (window.scrollY / max) : 0;
+          document.documentElement.style.setProperty('--scroll-pct', pct.toFixed(3));
+        }
+        window.addEventListener('scroll', updateScrollPct, { passive: true });
+        updateScrollPct();
+      })();
+    </script>
 
     <!-- Scroll restoration: top si no hay hash, ancla si lo hay -->
     <script is:inline>
@@ -93,20 +106,20 @@ import Footer from '../components/Footer.astro';
       }
     </script>
 
-    <!-- ── Google Fonts (Inter + JetBrains Mono, display=swap) ────── -->
+    <!-- ── Google Fonts (Space Grotesk + Inter, display=swap) ────── -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
     />
   </head>
 
-  <body class="bg-[#0A0A0A] text-[#F1F1F1] font-sans antialiased">
+  <body class="bg-[#1C1C1C] text-[#FFFFFF] font-sans antialiased">
     <!-- Skip-to-content link (accesibilidad) -->
     <a
       href="#main-content"
-      class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:top-4 focus:left-4 focus:px-4 focus:py-2 focus:bg-[#ACE600] focus:text-[#0A0A0A] focus:rounded focus:font-semibold"
+      class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:top-4 focus:left-4 focus:px-4 focus:py-2 focus:bg-[#367588] focus:text-white focus:rounded focus:font-semibold"
     >
       Skip to content
     </a>

@@ -1,7 +1,7 @@
 ---
-
 import { getCollection, render } from 'astro:content';
 import ProjectCard from './ProjectCard.astro';
+import SectionHeader from './ui/SectionHeader.astro';
 
 const allProjects = await getCollection('projects');
 
@@ -11,13 +11,15 @@ const sorted = allProjects.sort((a, b) => {
   return new Date(b.data.date).getTime() - new Date(a.data.date).getTime();
 });
 
-// Pre-renderizar el Markdown de cada proyecto a HTML string
 const projectsWithContent = await Promise.all(
   sorted.map(async (project) => {
     const { Content } = await render(project);
     return { project, Content };
   })
 );
+
+const topProjects = projectsWithContent.slice(0, 3);
+const moreProjects = projectsWithContent.slice(3);
 ---
 
 <section
@@ -25,52 +27,117 @@ const projectsWithContent = await Promise.all(
   class="mx-auto max-w-6xl px-6 py-24"
   aria-labelledby="projects-heading"
 >
+  <SectionHeader label="// proyectos destacados" title="Proyectos" />
 
-  <!-- Header -->
-  <div class="mb-12 flex flex-col gap-3">
-    <span class="font-mono text-xs text-[#ACE600] uppercase tracking-widest">
-      // proyectos destacados
-    </span>
-    <h2
-      id="projects-heading"
-      class="text-3xl sm:text-4xl font-bold text-[#F1F1F1] tracking-tight"
-    >
-      Proyectos
-    </h2>
-    <p class="text-[#A3A3A3] max-w-lg text-sm leading-relaxed">
-      Selección de proyectos personales y profesionales.
-      Haz clic en una tarjeta para ver los detalles.
-    </p>
-    <div class="w-12 h-px bg-[#ACE600] mt-1"></div>
-  </div>
-
-  <!-- Project grid -->
   {projectsWithContent.length === 0 ? (
-    <p class="text-[#A3A3A3] text-sm font-mono">
+    <p class="text-sm" style="color: var(--color-text-muted); font-family: var(--font-display);">
       // No se encontraron proyectos.
     </p>
   ) : (
-    <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" role="list">
-      {projectsWithContent.map(({ project, Content }) => (
-        <li>
-          <ProjectCard
-            slug={project.id}
-            title={project.data.title}
-            description={project.data.description}
-            tags={project.data.tags}
-            featured={project.data.featured}
-            liveUrl={project.data.liveUrl}
-            repoUrl={project.data.repoUrl ?? project.data.githubUrl}
-            image={project.data.image}
-            cardImage={project.data.cardImage}
-            modalImage={project.data.modalImage}
-            date={project.data.date}
-          >
-            <Content />
-          </ProjectCard>
-        </li>
-      ))}
-    </ul>
-  )}
+    <>
+      <ul
+        class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+        style="grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));"
+        role="list"
+      >
+        {topProjects.map(({ project, Content }, index) => (
+          <li>
+            <ProjectCard
+              slug={project.id}
+              title={project.data.title}
+              subtitle={project.data.subtitle}
+              description={project.data.description}
+              tags={project.data.tags}
+              featured={project.data.featured}
+              liveUrl={project.data.liveUrl}
+              repoUrl={project.data.repoUrl ?? project.data.githubUrl}
+              image={project.data.image}
+              cardImage={project.data.cardImage}
+              modalImage={project.data.modalImage}
+              images={project.data.images}
+              date={project.data.date}
+              index={index}
+            >
+              <Content />
+            </ProjectCard>
+          </li>
+        ))}
+      </ul>
 
+      {moreProjects.length > 0 && (
+        <>
+          <div class="flex justify-center mt-8">
+            <button
+              id="toggle-more-projects"
+              class="inline-flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded transition-all duration-200"
+              style="
+                color: var(--color-text);
+                border: 1px solid var(--color-border);
+                background: color-mix(in srgb, var(--color-bg-card) 80%, #000);
+                font-family: var(--font-display);
+              "
+              aria-expanded="false"
+            >
+              <span id="toggle-label">Ver más proyectos</span>
+              <span id="toggle-icon">↓</span>
+            </button>
+          </div>
+
+          <div
+            id="more-projects-wrapper"
+            class="overflow-hidden mt-4"
+            style="max-height: 0; transition: max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1);"
+          >
+            <ul
+              class="rounded-[14px] overflow-hidden"
+              style="border: 1px solid var(--color-border); background: var(--color-bg-card);"
+              role="list"
+            >
+              {moreProjects.map(({ project, Content }) => (
+                <li>
+                  <ProjectCard
+                    slug={project.id}
+                    title={project.data.title}
+                    subtitle={project.data.subtitle}
+                    description={project.data.description}
+                    tags={project.data.tags}
+                    featured={project.data.featured}
+                    liveUrl={project.data.liveUrl}
+                    repoUrl={project.data.repoUrl ?? project.data.githubUrl}
+                    image={project.data.image}
+                    cardImage={project.data.cardImage}
+                    modalImage={project.data.modalImage}
+                    images={project.data.images}
+                    date={project.data.date}
+                    variant="row"
+                  >
+                    <Content />
+                  </ProjectCard>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </>
+      )}
+    </>
+  )}
 </section>
+
+<script>
+  import { initMouseTilt } from '../scripts/mouse-tilt.ts';
+  initMouseTilt();
+
+  const btn = document.getElementById('toggle-more-projects');
+  const wrapper = document.getElementById('more-projects-wrapper');
+  const label = document.getElementById('toggle-label');
+  const icon = document.getElementById('toggle-icon');
+  let open = false;
+
+  btn?.addEventListener('click', () => {
+    open = !open;
+    if (wrapper) wrapper.style.maxHeight = open ? wrapper.scrollHeight + 'px' : '0';
+    if (label) label.textContent = open ? 'Ver menos' : 'Ver más proyectos';
+    if (icon) icon.textContent = open ? '↑' : '↓';
+    btn.setAttribute('aria-expanded', String(open));
+  });
+</script>
