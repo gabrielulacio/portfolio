@@ -4,8 +4,8 @@
   "description": "Portfolio de Gabriel Ulacio, Desarrollador Full-Stack especializado en interfaces web modernas y arquitectura de software.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0A0A0A",
-  "theme_color": "#ACE600",
+  "background_color": "#1C1C1C",
+  "theme_color": "#367588",
   "icons": [
     {
       "src": "/favicon.svg",

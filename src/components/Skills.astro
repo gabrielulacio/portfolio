@@ -14,41 +14,35 @@ interface SkillGroup {
 
 const skillGroups: SkillGroup[] = [
   {
-    category: 'Lenguajes',
-    skills: [
-      { name: 'Python',     icon: 'simple-icons:python'     },
-      { name: 'SQL',        icon: 'mdi:database'            },
-      { name: 'JavaScript', icon: 'simple-icons:javascript' },
-      { name: 'C++',        icon: 'simple-icons:cplusplus'  },
-      { name: 'Java',       icon: 'mdi:language-java'        },
-    ],
-  },
-  {
     category: 'Frontend & UI',
     skills: [
-      { name: 'React.js',    icon: 'simple-icons:react'        },
-      { name: 'Vue.js',      icon: 'simple-icons:vuedotjs'     },
-      { name: 'Astro',       icon: 'simple-icons:astro'        },
-      { name: 'Tailwind CSS',icon: 'simple-icons:tailwindcss'  },
-      { name: 'Figma',       icon: 'simple-icons:figma'        },
+      { name: 'Vue.js',       icon: 'simple-icons:vuedotjs'     },
+      { name: 'Astro',        icon: 'simple-icons:astro'        },
+      { name: 'JavaScript',   icon: 'simple-icons:javascript'   },
+      { name: 'Tailwind CSS', icon: 'simple-icons:tailwindcss'  },
+      { name: 'HTML5 & CSS3', icon: 'simple-icons:html5'        },
+      { name: 'Figma',        icon: 'simple-icons:figma'        },
     ],
   },
   {
-    category: 'Bases de Datos',
+    category: 'Backend & Datos',
     skills: [
-      { name: 'PostgreSQL', icon: 'simple-icons:postgresql' },
-      { name: 'MySQL',      icon: 'simple-icons:mysql'      },
-      { name: 'Oracle DB',  icon: 'simple-icons:oracle'     },
-      { name: 'MongoDB',    icon: 'simple-icons:mongodb'    },
+      { name: 'Python',       icon: 'simple-icons:python'       },
+      { name: 'FastAPI',      icon: 'simple-icons:fastapi'      },
+      { name: 'PostgreSQL',   icon: 'simple-icons:postgresql'   },
+      { name: 'MongoDB',      icon: 'simple-icons:mongodb'      },
+      { name: 'SQL',          icon: 'mdi:database'              },
+      { name: 'Supabase',     icon: 'simple-icons:supabase'     },
     ],
   },
   {
-    category: 'Herramientas',
+    category: 'Herramientas & Flujos',
     skills: [
-      { name: 'Git / GitHub', icon: 'simple-icons:github'    },
-      { name: 'HTML5',        icon: 'simple-icons:html5'     },
-      { name: 'CSS3',         icon: 'simple-icons:css3'      },
-      { name: 'Prompt Eng.',  icon: 'mdi:robot-outline'      },
+      { name: 'Docker',       icon: 'simple-icons:docker'       },
+      { name: 'Git',          icon: 'simple-icons:git'          },
+      { name: 'GitHub',       icon: 'simple-icons:github'       },
+      { name: 'VS Code',      icon: 'simple-icons:visualstudiocode' },
+      { name: 'Terminal',     icon: 'mdi:console'               },
     ],
   },
 ];
@@ -63,15 +57,15 @@ const skillGroups: SkillGroup[] = [
   <SectionHeader label="// stack técnico" title="Habilidades" />
 
   <div
-    class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4"
+    class="grid gap-8 md:grid-cols-3"
   >
     {skillGroups.map(({ category, skills }, gi) => (
       <div
-        class="sr flex flex-col gap-4"
+        class="sr flex flex-col gap-4 items-center"
         style={`transition-delay: ${gi * 150}ms;`}
       >
         <h3
-          class="text-xs font-medium uppercase tracking-[0.12em] pb-3"
+          class="text-xs font-medium uppercase tracking-[0.12em] pb-3 text-center w-full"
           style="
             color: var(--color-text-muted);
             font-family: var(--font-display);

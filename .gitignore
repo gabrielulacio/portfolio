@@ -34,3 +34,6 @@ desktop.ini
 .tmp/
 
 CLAUDE.md
+.agents/
+.claude/
+skills-lock.json

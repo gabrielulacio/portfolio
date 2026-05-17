@@ -1,37 +1,30 @@
 ---
-/**
- * src/layouts/MainLayout.astro
- * ─────────────────────────────
- * Root layout used by every page.
- * Imports global styles, sets up <head> meta tags,
- * and wraps content with the site Header and Footer.
- *
- * Props:
- *   title       – <title> tag text (appended with site name)
- *   description – <meta name="description"> content
- *   image       – Open Graph image URL (defaults to /og-default.png)
- */
-
 export interface Props {
   title?: string;
   description?: string;
+  ogTitle?: string;
+  ogDescription?: string;
   image?: string;
 }
 
 const {
   title = 'Portfolio',
-  description = 'Desarrollador Full-Stack, estudiante de Ingeniería en Informática (UNET). Especializado en interfaces web modernas y arquitectura de software.',
-  image = '/og-default.png',
+  description = 'Portafolio de Gabriel Ulacio, Desarrollador Full-Stack especializado en Vue.js y Python. Construcción de arquitecturas SaaS, APIs y bases de datos.',
+  ogTitle,
+  ogDescription,
+  image = '/og-image.jpg',
 } = Astro.props;
 
 const SITE_NAME = 'Gabriel Ulacio';
-const SITE_URL  = 'https://gabrielulacio.vercel.app/';
+const SITE_URL  = 'https://gabrielulacio.vercel.app';
 
-const siteTitle    = title === 'Portfolio'
-  ? `${SITE_NAME} — Desarrollador Full-Stack`
+const siteTitle         = title === 'Portfolio'
+  ? `${SITE_NAME} | Desarrollador Full-Stack Vue.js y Python`
   : `${title} · ${SITE_NAME}`;
-const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? SITE_URL);
-const ogImage      = image.startsWith('http') ? image : `${SITE_URL}${image}`;
+const resolvedOgTitle   = ogTitle       ?? 'Gabriel Ulacio — Desarrollador Full-Stack';
+const resolvedOgDesc    = ogDescription ?? 'Especializado en ecosistemas Vue.js y Python. Diseño de arquitecturas SaaS transaccionales y soluciones escalables listas para producción.';
+const canonicalURL      = new URL(Astro.url.pathname, Astro.site ?? SITE_URL);
+const ogImage           = image.startsWith('http') ? image : `${SITE_URL}${image}`;
 
 import '../styles/global.css';
 import Header from '../components/Header.astro';
@@ -50,7 +43,7 @@ import Footer from '../components/Footer.astro';
     <title>{siteTitle}</title>
     <meta name="description" content={description} />
     <meta name="author" content={SITE_NAME} />
-    <meta name="keywords" content="desarrollador web, full-stack, frontend, backend, Venezuela, portfolio, React, Node.js, TypeScript, Astro, Tailwind CSS" />
+    <meta name="keywords" content="desarrollador web, full-stack, Vue.js, Python, SaaS, backend, frontend, Venezuela, portfolio, TypeScript, Astro, Tailwind CSS" />
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
     <link rel="canonical" href={canonicalURL} />
 
@@ -59,17 +52,18 @@ import Footer from '../components/Footer.astro';
     <meta property="og:url"          content={canonicalURL} />
     <meta property="og:site_name"    content={SITE_NAME} />
     <meta property="og:locale"       content="es_VE" />
-    <meta property="og:title"        content={siteTitle} />
-    <meta property="og:description"  content={description} />
+    <meta property="og:title"        content={resolvedOgTitle} />
+    <meta property="og:description"  content={resolvedOgDesc} />
     <meta property="og:image"        content={ogImage} />
+    <meta property="og:image:type"   content="image/jpeg" />
     <meta property="og:image:width"  content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt"    content={`${SITE_NAME} — Portfolio`} />
 
     <!-- Twitter / X Card -->
     <meta name="twitter:card"        content="summary_large_image" />
-    <meta name="twitter:title"       content={siteTitle} />
-    <meta name="twitter:description" content={description} />
+    <meta name="twitter:title"       content={resolvedOgTitle} />
+    <meta name="twitter:description" content={resolvedOgDesc} />
     <meta name="twitter:image"       content={ogImage} />
     <meta name="twitter:image:alt"   content={`${SITE_NAME} — Portfolio`} />
 
@@ -109,6 +103,11 @@ import Footer from '../components/Footer.astro';
     <!-- ── Google Fonts (Space Grotesk + Inter, display=swap) ────── -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
+    />
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap"

@@ -53,7 +53,8 @@ import Logo from './ui/Logo.astro';
     </div>
 
     <!-- Heading -->
-    <div class="flex flex-col items-center" style="gap: 8px;">
+    <h1 class="sr-only">Gabriel Ulacio — Desarrollador Full-Stack</h1>
+    <div class="flex flex-col items-center" style="gap: 8px;" aria-hidden="true">
       <div class="overflow-hidden">
         <p
           class="font-bold"
@@ -97,7 +98,7 @@ import Logo from './ui/Logo.astro';
             font-family: var(--font-display);
           "
         >
-          Futuro Ingeniero
+          Desarrollador
         </p>
       </div>
       <div class="overflow-hidden">
@@ -112,7 +113,7 @@ import Logo from './ui/Logo.astro';
             font-family: var(--font-display);
           "
         >
-          en Informática.
+          Full-Stack.
         </p>
       </div>
     </div>
@@ -128,13 +129,8 @@ import Logo from './ui/Logo.astro';
         animation: fadeUp 0.8s ease 0.9s forwards;
       "
     >
-      Estudiante avanzado de Ingeniería en Informática (UNET).
-      Combino bases sólidas en
-      <strong style="color: var(--color-text); font-weight: 500;">arquitectura de software</strong>
-      con entrega de soluciones en
-      <strong style="color: var(--color-text); font-weight: 500;">tiempo récord</strong>.
+      Especializado en ecosistemas <strong style="color: var(--color-text); font-weight: 500;">Vue.js y Python</strong>. Construyo arquitecturas SaaS, APIs RESTful y soluciones de bases de datos optimizadas para despliegues en producción.
     </p>
-
     <!-- CTA buttons -->
     <div
       class="flex flex-wrap items-center justify-center gap-4"
@@ -178,7 +174,7 @@ import Logo from './ui/Logo.astro';
       aria-label="Tecnologías principales"
       style="opacity: 0; animation: fadeUp 0.8s ease 1.3s forwards;"
     >
-      {['Python', 'Astro', 'Vue.js', 'PostgreSQL', 'Tailwind CSS', 'React.js'].map((tech, i) => (
+      {['Vue.js', 'Python', 'FastAPI', 'PostgreSQL', 'Docker', 'Astro'].map((tech, i) => (
         <span
           class="tech-pill text-xs px-3 py-1 rounded-full cursor-default transition-all duration-200"
           style={`

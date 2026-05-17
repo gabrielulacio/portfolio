@@ -6,6 +6,9 @@ import SectionHeader from './ui/SectionHeader.astro';
 const allProjects = await getCollection('projects');
 
 const sorted = allProjects.sort((a, b) => {
+  const aOrder = a.data.order ?? Infinity;
+  const bOrder = b.data.order ?? Infinity;
+  if (aOrder !== bOrder) return aOrder - bOrder;
   if (a.data.featured && !b.data.featured) return -1;
   if (!a.data.featured && b.data.featured) return 1;
   return new Date(b.data.date).getTime() - new Date(a.data.date).getTime();
